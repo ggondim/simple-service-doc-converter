@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - CONCURRENCY_LIMIT=5
+    # Para desenvolvimento local, descomente o volume abaixo (pode sobrescrever a instalação do bun no container quando usar bind-mount)
+    # volumes:
+    #   - ./:/app
+    restart: unless-stopped

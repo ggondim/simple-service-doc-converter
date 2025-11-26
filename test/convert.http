@@ -1,0 +1,12 @@
+### Convert DOCX to PDF using the running service
+POST http://localhost:3000/convert
+Content-Type: multipart/form-data
+
+# the file path is relative to this .http file (./teste.docx)
+file=@./teste.docx; type=application/vnd.openxmlformats-officedocument.wordprocessingml.document
+from=docx
+to=pdf
+
+### Expected
+# The response body will be the converted PDF binary. Use the CLI script defined in package.json to
+# save the response body into `test/converted.pdf`.

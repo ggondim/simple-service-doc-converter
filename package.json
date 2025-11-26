@@ -1,0 +1,19 @@
+{
+  "name": "simple-service-doc-converter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "bun src/server.ts",
+    "dev": "bun src/server.ts",
+    "test:http": "httpyac send ./test/convert_request.http --output body --silent > ./test/converted.pdf"
+  },
+  "dependencies": {
+    "p-limit": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "httpyac": "^6.16.7",
+    "typescript": "^5.9.3"
+  }
+}
