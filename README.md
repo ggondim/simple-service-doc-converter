@@ -1,4 +1,4 @@
-# simple-service-doc-converter
+# api-soffice
 
 Simple API for document conversion using LibreOffice (`soffice`) via Bun (TypeScript).
 
