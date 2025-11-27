@@ -1,0 +1,9 @@
+### Convert by providing a download URL (JSON)
+POST http://localhost:3000/process?uploadUrl=https://example.com/upload
+Content-Type: application/json
+
+{
+  "downloadUrl": "https://example.com/test/test.docx",
+  "from": "docx",
+  "to": "pdf"
+}

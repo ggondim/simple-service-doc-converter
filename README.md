@@ -7,14 +7,14 @@ This repository provides a minimal HTTP API that accepts a file (multipart/form-
 Key features
 
 - HTTP server implemented for Bun (TypeScript)
-- Endpoint: POST /convert (multipart/form-data)
+- Endpoint: POST /process (multipart/form-data)
 - Real conversion using `soffice --headless --convert-to`
 - Isolation via Docker / Docker Compose (image based on oven/bun:debian)
 - Simple concurrency control using `p-limit` (environment variable CONCURRENCY_LIMIT)
 
 ## Contents
 
-- `src/server.ts` - Bun server with POST `/convert` route
+- `src/server.ts` - Bun server with POST `/process` route
 - `src/lib/convert.ts` - logic that writes a temporary file, runs `soffice`, and returns the result
 - `src/common/class/FileTemp.ts` - utility for temporary files
 - `Dockerfile` - image that installs Bun and LibreOffice
@@ -52,7 +52,7 @@ docker compose logs -f
 3. Test the endpoint with curl (replace `test/test.docx` with your file):
 
 ```sh
-curl -s -X POST "http://localhost:3000/convert" \
+curl -s -X POST "http://localhost:3000/process" \
   -F "file=@test/test.docx" \
   -F "from=docx" \
   -F "to=pdf" \
@@ -97,12 +97,21 @@ If `httpyac` prompts for interactive input (telemetry/config), run it in an envi
 
 ## API
 
-POST /convert
+POST /process
 
 - Body: multipart/form-data
   - `file` - file to be converted
   - `from` - source extension (e.g. `docx`)
   - `to` - target extension (e.g. `pdf`)
+
+Or
+
+- Body: application/json
+  - `downloadUrl` - public URL where the server can download the input file
+  - `from` - source extension (e.g. `docx`)
+  - `to` - target extension (e.g. `pdf`)
+
+When sending JSON with `downloadUrl` the server will fetch the file and convert it. The response is the converted binary with a `Content-Disposition` header suggesting a filename.
 
 Successful response: binary content of the converted file with a `Content-Disposition` header suggesting a filename.
 
@@ -111,7 +120,7 @@ Error response: JSON or plain text with error details (for example, output from 
 Curl example:
 
 ```sh
-curl -X POST "http://localhost:3000/convert" \
+curl -X POST "http://localhost:3000/process" \
   -F "file=@path/to/file.docx" \
   -F "from=docx" \
   -F "to=pdf" \
@@ -151,7 +160,7 @@ Main files:
 This project is licensed under the MIT License. See the `LICENSE` file for details.
 
 ```sh
-curl -X POST "http://localhost:3000/convert" \
+curl -X POST "http://localhost:3000/process" \
   -F "file=@path/to/file.docx" \
   -F "from=docx" \
   -F "to=pdf" \
